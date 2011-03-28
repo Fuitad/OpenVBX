@@ -1,5 +1,8 @@
-<?php
-
+<?php if (version_compare(PHP_VERSION, '5.2.0', '<=')): ?>
+<div class="vbx-applet">
+    <h1>This applet is not supported in php version <?= PHP_VERSION ?></h1>
+</div>
+<?php else:
 $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
 							'Saturday', 'Sunday');
 $ini = "$this->plugin_path/timing.ini";
@@ -11,13 +14,13 @@ if (is_readable($ini)) {
 		error_log($e->getMessage());
 	}
 }
-if (empty($tz)) $tz = new DateTimeZone('America/Los_angeles');
+if (empty($tz)) $tz = new DateTimeZone('America/Los_Angeles');
 $now = new DateTime('now', $tz);
 ?>
 <div class="vbx-applet">
 	<h2>Set your open hours.</h2>
-	<p>Use the table below to set the hours which you are open. Time is based on 
-	the server's current time. We use the timezone specified in your 
+	<p>Use the table below to set the hours which you are open. Time is based on
+	the server's current time. We use the timezone specified in your
 	<em>timing.ini</em> in the timing plugin directory.</p>
 	<p><em>Your server's current time: <?php echo $now->format('r'); ?></em></p>
 
@@ -26,7 +29,7 @@ $now = new DateTime('now', $tz);
 		<div class="timing-timerange-wrap">
 			<label><?php print $day; ?></label>
 <?php
-			$state = AppletInstance::getValue("range_{$indx}_from}", '') ? 'remove' : 'add';
+			$state = AppletInstance::getValue("range_{$index}_from}", '') ? 'remove' : 'add';
 			$default = $index < 5 ? '09:00AM' : '';
 			echo AppletUI::TimeRange(
 				"range_$index",
@@ -52,4 +55,4 @@ $now = new DateTime('now', $tz);
 		<?php echo AppletUI::DropZone('closed', 'Closed'); ?>
 	</div>
 </div>
-
+<?php endif; ?>
